@@ -1,18 +1,44 @@
 const express = require("express");
 const { getValuation, getWaccAndRoicV3 } = require("stock-snapshot");
 const fs = require("fs")
+const { execSync } = require("child_process")
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.get("/fs", async (req, res) => {
-
   try {
-    //period = Quarterly , TTM , Annual
-    //StatementType = Balance Sheet , Cash Flow, Income,Ratios
+    let chromePath = null;
 
+    // ลองเช็ค path ของ chrome ด้วย which
+    try {
+      chromePath = execSync("which google-chrome").toString().trim();
+    } catch (e) {
+      // ไม่พบจาก which
+    }
 
-    res.json({googlePathCheck : fs.existsSync("/usr/bin/google-chrome")});
+    // fallback หากยังไม่เจอ ลอง path ทั่วไป
+    const fallbackPaths = [
+      "/usr/bin/google-chrome",
+      "/usr/bin/google-chrome-stable",
+      "/opt/google/chrome/chrome"
+    ];
+
+    if (!chromePath || !fs.existsSync(chromePath)) {
+      for (const path of fallbackPaths) {
+        if (fs.existsSync(path)) {
+          chromePath = path;
+          break;
+        }
+      }
+    }
+
+    if (chromePath && fs.existsSync(chromePath)) {
+      res.json({ googlePathCheck: true, path: chromePath });
+    } else {
+      res.json({ googlePathCheck: false });
+    }
+
   } catch (err) {
     res.status(500).json({ error: "ดึงข้อมูลไม่ได้", detail: err.message });
   }
