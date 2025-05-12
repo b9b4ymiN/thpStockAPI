@@ -1,14 +1,15 @@
 #!/bin/bash
 
-# ติดตั้ง Chrome แบบ manual
-mkdir -p /opt/chrome
-cd /opt/chrome
+# ติดตั้ง Chrome บน Linux (Debian-based)
+apt-get update
+apt-get install -y wget curl gnupg unzip
 
-curl -O https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-apt-get update && apt-get install -y ./google-chrome-stable_current_amd64.deb || true
+# เพิ่ม Chrome key และ repo
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 
-# สร้าง symlink
-ln -s /usr/bin/google-chrome /opt/render/.cache/puppeteer/chrome
+apt-get update
+apt-get install -y google-chrome-stable
 
-# เริ่มแอป
-npm start
+# เช็คว่าติดตั้งแล้ว
+google-chrome --version
