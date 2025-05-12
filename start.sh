@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo "Installing Chrome..."
+# Install Chrome
 apt-get update
-apt-get install -y wget unzip
+apt-get install -y wget gnupg unzip curl
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 apt-get install -y ./google-chrome-stable_current_amd64.deb
 
-export CHROME_PATH=$(which google-chrome)
-echo "Chrome installed at $CHROME_PATH"
+# Start your node app
+node dist/index.js
