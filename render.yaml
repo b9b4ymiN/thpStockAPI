@@ -5,7 +5,5 @@ services:
     buildCommand: |
       chmod +x start.sh
       ./start.sh
-      npm install
-      npm run build
-    startCommand: node dist/index.js
+    startCommand: npm start
     plan: free
