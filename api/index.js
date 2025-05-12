@@ -1,8 +1,22 @@
 const express = require("express");
 const { getValuation, getWaccAndRoicV3 } = require("stock-snapshot");
+const fs = require("fs")
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.get("/fs", async (req, res) => {
+
+  try {
+    //period = Quarterly , TTM , Annual
+    //StatementType = Balance Sheet , Cash Flow, Income,Ratios
+
+
+    res.json({googlePathCheck : fs.existsSync("/usr/bin/google-chrome")});
+  } catch (err) {
+    res.status(500).json({ error: "ดึงข้อมูลไม่ได้", detail: err.message });
+  }
+});
 
 app.get("/valuation/:symbol", async (req, res) => {
   const symbol = req.params.symbol.toUpperCase(); // เช่น "PTT"
