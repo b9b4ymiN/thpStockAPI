@@ -1,13 +1,11 @@
 services:
   - type: web
-    name: stock-snapshot
+    name: stock-snapshot-api
     env: node
     buildCommand: |
-      apt-get update && apt-get install -y wget gnupg ca-certificates
-      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      apt install -y ./google-chrome-stable_current_amd64.deb
+      chmod +x start.sh
+      ./start.sh
       npm install
-    startCommand: node index.js
-    envVars:
-      - key: PUPPETEER_EXECUTABLE_PATH
-        value: "/usr/bin/google-chrome"
+      npm run build
+    startCommand: node dist/index.js
+    plan: free
